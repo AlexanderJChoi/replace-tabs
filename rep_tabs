@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [ -t 0 ]; then exit 0; fi
+
+while IFS= read -s -r -d$'\t' char 
+do
+  printf "%s%s" "$char" "  "
+done
+printf "$char"
