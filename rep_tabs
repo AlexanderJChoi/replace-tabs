@@ -20,7 +20,7 @@ done
 
 case "$spaces" in
   ''|*[!0-9]*) 
-    printf "Bad arguement: -n\n"
+    printf "Bad arguement: -n%s\n" "$spaces"
     exit 1
     ;;
   *)
