@@ -1,9 +1,38 @@
 #!/bin/bash
+spaces=2
+if [ -t 0 ]; then exit 0; fi #exit if the command is accepting input from the terminal
 
-if [ -t 0 ]; then exit 0; fi
+while [ $# -gt 0 ]; do
+  case "$1" in 
+    -n)
+      spaces=$2; shift
+      ;;
+    -n*)
+      spaces=${1:2}
+      ;;
+    *)
+      printf "Bad arguement: %s\n" "$1"
+      exit 1
+      ;;
+  esac
+  shift
+done
+
+case "$spaces" in
+  ''|*[!0-9]*) 
+    printf "Bad arguement: -n\n"
+    exit 1
+    ;;
+  *)
+esac
 
 while IFS= read -s -r -d$'\t' char 
 do
-  printf "%s%s" "$char" "  "
+  printf "%s" "$char" 
+  for ((; ! "$spaces" == 0 ; spaces-- )); do
+    printf " "
+  done
 done
 printf "$char"
+
+exit 0
