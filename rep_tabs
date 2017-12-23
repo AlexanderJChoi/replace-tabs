@@ -1,6 +1,6 @@
 #!/bin/bash
 spaces=2
-if [ -t 0 ]; then exit 0; fi #exit if the command is accepting input from the terminal
+file=0
 
 while [ $# -gt 0 ]; do
   case "$1" in 
@@ -11,8 +11,12 @@ while [ $# -gt 0 ]; do
       spaces=${1:2}
       ;;
     *)
-      printf "Bad arguement: %s\n" "$1"
-      exit 1
+      if [ -f "$1" ] && [ -r "$1" ] && [ -w "$1" ]; then 
+        file=$1
+      else 
+        printf "Bad arguement: %s\n" "$1"
+        exit 1
+      fi
       ;;
   esac
   shift
@@ -26,13 +30,22 @@ case "$spaces" in
   *)
 esac
 
+if [ ! "$file" = 0 ]; then 
+  "$0" -n "$spaces" < "$file" > temp.temp
+  cat < temp.temp > "$file" 
+  rm temp.temp
+  exit 0
+fi
+
+if [ -t 0 ]; then exit 0; fi #exit if the command is accepting input from the terminal
+
 while IFS= read -s -r -d$'\t' char 
 do
   printf "%s" "$char" 
   for ((; ! "$spaces" == 0 ; spaces-- )); do
-    printf " "
+    printf " " 
   done
 done
-printf "$char"
+printf "$char" 
 
 exit 0
